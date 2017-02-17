@@ -22,7 +22,7 @@ function! s:unite_source.hooks.on_syntax(args, context)
                 \ contained containedin=uniteSource__youdao
     syntax match uniteSource__youdao_ph /\[.*\]/
                 \ contained containedin=uniteSource__youdao
-    syntax match uniteSource__youdao_pos /*\s\zs\w\+\./
+    syntax match uniteSource__youdao_pos /●\s\zs\w\+\./
                 \ contained containedin=uniteSource__youdao
     highlight default link uniteSource__youdao_kw Keyword
     highlight default link uniteSource__youdao_ph Todo
@@ -59,15 +59,13 @@ endfunction
 
 function! s:extract_entry(dict)
     let basic = get(a:dict, 'basic', {})
-    let translation = '    '.get(a:dict, 'translation', [''])[0]
-    let phonetic = '    ['.get(basic, 'phonetic', '').']'
-    let explanation = join(map(get(basic, 'explains', []), '"    * ".v:val'), "\n")
+    let translation = '  '.get(a:dict, 'translation', [''])[0]
+    let phonetic = '  ['.get(basic, 'phonetic', '').']'
+    let explanation = join(map(get(basic, 'explains', []), '"● ".v:val'), "\n")
     return {
                 \ 'word' : join([
-                \       'Query:', '    '.s:input,
-                \       'Translation:', translation,
-                \       'Phonetic:', phonetic,
-                \       'Explanation:', explanation],
+                \       s:input. phonetic,
+                \       explanation],
                 \       "\n"),
                 \ 'kind' : 'word',
                 \ 'is_multiline' : 1,
